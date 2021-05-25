@@ -1,0 +1,18 @@
+events{
+}
+
+http  {
+	
+	server {
+	listen 8080;
+	root /var/www/html/
+	location /images {
+		root /var/www/tutorial/
+	}
+	location ~ .jpg$ {
+		return 403;
+
+		}
+	}
+
+}

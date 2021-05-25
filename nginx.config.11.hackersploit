@@ -1,0 +1,76 @@
+include /etc/nginx/modules-enabled/*.config ;
+
+event {
+	worker_connection 768 ;
+}
+
+http {
+	
+	#basic settings	
+
+	sendfile on ;
+	tcp_nopush on ;
+	tcp_nodelay on ;
+	keepalive_timeout 65 ;
+	types_hash_max_size 2048 ;
+	server_tokens off ;
+
+	# server_names_hash_bucket_size 64 ;
+	# server_name_in_redirect off ; 
+	
+	include /etc/nginx/mine.types ;
+	default_type application/octet-stream ;
+
+
+
+	#ssl settings
+
+	ssl_protocols TLSv1 TLSv1.2 TLSv1.2 TLSv1.3 ; 
+	ssl_prefer_server_ciphers on ;
+	
+	#log settings
+	
+	access_log /var/log/nginx/access.log
+	error_log /var/log/nginx/error.log
+	
+	# GZIP settings
+
+	gzip on;
+	
+	# gzip_vary on ;
+	# gzip_proxied any ;
+	# gzip_comp_level 6 ;
+	# gzip_buffers 16 8k ;
+	# gzip_http_version 1.1 ;
+	# gzip_type text/plain text/css applicaion/json application/javascript text/xml application/xml application/xml+rss text/javascript ;
+
+	proxy_hide_header X-Powered-By ;
+	add_header X-Frame-Option SAMEORIGIN;
+
+	
+	# virtual host configs
+
+	
+	server {
+		listen 80 ;
+		server_name localhost ;
+		auth_basic "development team only";
+		auth_basic_user_file /etc/nginx/.htpasswd;
+		
+		location /var/www/html {
+			auth_basic on ;
+			root /var/www/html;
+		}	
+
+
+
+
+	}
+
+
+
+
+}
+
+
+ 
